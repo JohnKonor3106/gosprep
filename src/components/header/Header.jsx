@@ -1,12 +1,15 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
+import { useAppStore } from '@/state/stateApp'
 
-export const Header = ({ onOpenMenu }) => {
+export const Header = () => {
+  const { setIsOpen } = useAppStore();
+
   return (
     <Box h="56px" px={4} bg="blue.500" display="flex" alignItems="center" shadow="sm">
       <HStack gap={3} align="center">
         <Box
           as="button"
-          onClick={onOpenMenu}
+          onClick={() => setIsOpen(true)}
           aria-label="Открыть меню"
           display="flex"
           flexDirection="column"

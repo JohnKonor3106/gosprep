@@ -1,0 +1,10 @@
+# Эта папка предназначена для хранения PDF-файлов учебников
+# Структура:
+# books/
+#   administration-police/
+#     учебник.pdf
+#   criminal-law/
+#     ...
+#   theory-state-law/
+#     ...
+

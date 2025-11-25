@@ -1,42 +1,63 @@
-import { Box, Text, SimpleGrid } from '@chakra-ui/react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { Box, Text, SimpleGrid, VStack } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
 
 const QuestionCard = ({ questions }) => {
   const navigate = useNavigate()
-  const location = useLocation()
 
   const handleShowQuestion = (id) => {
-    console.log(location.pathname)
-    navigate(`${location.pathname}/${id}`)
+    navigate(`questions/${id}`)
   }
 
   return (
-    <SimpleGrid columns={{ base: 4, sm: 6, md: 8, lg: 10 }} gap={3} justifyItems="center" mt={4}>
+    <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} gap={4} mt={4}>
       {questions.map((q) => (
         <Box
           key={q.id}
-          width="40px"
-          height="40px"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          borderRadius="md"
+          p={4}
+          borderRadius="lg"
           bg="blue.50"
           border="1px solid"
           borderColor="blue.200"
-          color="blue.700"
-          fontWeight="bold"
-          fontSize="sm"
           onClick={() => handleShowQuestion(q.id)}
           _hover={{
             bg: 'blue.100',
             cursor: 'pointer',
-            transform: 'scale(1.05)',
+            transform: 'translateY(-2px)',
+            boxShadow: 'md',
+            borderColor: 'blue.300',
             transition: 'all 0.2s',
           }}
           transition="all 0.2s"
+          boxShadow="sm"
         >
-          <Text>{String(q.id).padStart(2, '0')}</Text>
+          <VStack align="stretch" spacing={2}>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Text
+                fontSize="sm"
+                fontWeight="bold"
+                color="blue.700"
+                bg="blue.200"
+                px={2}
+                py={1}
+                borderRadius="md"
+              >
+                {String(q.id).padStart(2, '0')}
+              </Text>
+            </Box>
+            <Text
+              fontSize="sm"
+              fontWeight="medium"
+              color="gray.700"
+              lineHeight="1.4"
+              noOfLines={2}
+            >
+              {q.topic || q.title}
+            </Text>
+          </VStack>
         </Box>
       ))}
     </SimpleGrid>

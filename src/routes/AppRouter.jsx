@@ -1,37 +1,55 @@
-// routes.ts
-import Home from '@/pages/Home'
-import Chapter from '@/components/card/Сhapter'
-import QuestionCard from '@/components/card/Card'
-import QuestionDetail from '@/pages/QuestionDetail'
-import { useAppStore } from '@/state/stateApp'
+import { lazy, Suspense } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import { Box, Spinner } from '@chakra-ui/react'
+import { ROUTES } from '@/constants/routes'
+import { Layout } from '@/components/layout/Layout'
 
-export const getRoutesList = () => {
-  const { chapters, disciplines, toggleChapter } = useAppStore()
+// Lazy loading компонентов
+const Home = lazy(() => import('@/pages/Home'))
+const Chapter = lazy(() => import('@/components/chapter/Chapter'))
+const DisciplinePage = lazy(() => import('@/pages/DisciplinePage'))
+const QuestionDetail = lazy(() => import('@/pages/QuestionDetail'))
+const HelpPage = lazy(() => import('@/pages/HelpPage'))
 
-  const administrationPoliceQuestions = disciplines['administration-police']
+// Компонент загрузки
+const LoadingFallback = () => (
+  <Box
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    minH="50vh"
+  >
+    <Spinner size="xl" color="blue.500" />
+  </Box>
+)
 
-  return [
-    {
-      path: '/',
-      element: <Home />,
-    },
-    {
-      path: '/questions/chapters',
-      element: <Chapter list={chapters} toggleChapter={toggleChapter} />,
-    },
-    {
-      path: '/questions/chapters/administration-police',
-      element: <QuestionCard questions={administrationPoliceQuestions.questions} />,
-    },
-    {
-      path: '/questions/chapters/administration-police/:id',
-      element: <QuestionDetail questions={administrationPoliceQuestions.questions} />,
-    },
-  ]
-}
+export const AppRouter = () => {
+  const disciplinesPath = ROUTES.DISCIPLINES.replace(/^\//, '')
+  const federalLawPath = ROUTES.FEDERAL_LAW.replace(/^\//, '')
+  const helpPath = ROUTES.HELP.replace(/^\//, '')
 
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
 
-const AppRoutes = () => {
- 
-  
+          <Route path={disciplinesPath}>
+            {/* Список всех дисциплин */}
+            <Route index element={<Chapter />} />
+            
+            {/* Страница конкретной дисциплины с вкладками */}
+            <Route path=":disciplineId">
+              <Route index element={<DisciplinePage />} />
+              {/* Детальный просмотр вопроса */}
+              <Route path="questions/:id" element={<QuestionDetail />} />
+            </Route>
+          </Route>
+
+          <Route path={federalLawPath} element={<div>Федеральные законы</div>} />
+          <Route path={helpPath} element={<HelpPage />} />
+        </Route>
+      </Routes>
+    </Suspense>
+  )
 }

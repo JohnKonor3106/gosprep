@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 import { administrationPoliceQuestions } from '@/data/questions/administration-police'
+import { discipinesConfig } from '@/config/disciplines'
 import { chaptersConfig } from '@/config/chapters'
 
 export const useAppStore = create((set, get) => ({
   isOpen: false,
-  chapters:  Object.keys(chaptersConfig),
+  chapters: chaptersConfig,
   disciplines: {
-    'administration-police': administrationPoliceQuestions,
-    // 'criminal-law': criminalLawQuestions,
+    ...discipinesConfig
   },
   getQuestionsByChapter: (chapter) => {
     const state = get()
@@ -16,13 +16,4 @@ export const useAppStore = create((set, get) => ({
   // Действия
   setIsOpen: (isOpen) => set({ isOpen }),
 
-  toggleChapter: (newChapter) =>
-    set((state) => ({
-      chapters: {
-        ...state.chapters,
-        current: newChapter,
-      },
-    })),
-
-  setChapters: (chapters) => set({ chapters }),
 }))

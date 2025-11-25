@@ -1,22 +1,47 @@
+import { useEffect } from 'react'
 import { Box, Button, HStack, Stack, Text, VStack, CloseButton } from '@chakra-ui/react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useAppStore } from '@/state/stateApp'
+import { HEADER_HEIGHT_PX } from '@/constants'
 
-const HEADER_HEIGHT_PX = 56
+export function AppDrawer() {
+  const { setIsOpen, isOpen, chapters} = useAppStore();
 
-export function AppDrawer({ isOpen, onClose }) {
+  // Блокируем прокрутку страницы при открытом drawer
+  useEffect(() => {
+    if (isOpen) {
+      // Сохраняем текущую позицию прокрутки
+      const scrollY = window.scrollY
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
+    } else {
+      // Восстанавливаем позицию прокрутки
+      const scrollY = document.body.style.top
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0', 10) * -1)
+      }
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+    }
+  }, [isOpen]);
+
   const navigate = useNavigate()
   const location = useLocation()
 
-  const menuItems = [
-    { path: '/', label: 'Главная', icon: '🏠' },
-    { path: '/questions/chapters', label: 'Вопросы', icon: '❓' },
-    { path: '/federal_low', label: 'ФЗ' },
-    { path: '/help', label: 'Помощь', icon: '💬' },
-  ]
-
   const handleNavigation = (path) => {
     navigate(path)
-    onClose()
+    setIsOpen(false)
   }
 
   return (
@@ -31,7 +56,7 @@ export function AppDrawer({ isOpen, onClose }) {
         zIndex="modal"
       >
         <Box
-          w="400px"
+          w="450px"
           h={`calc(100vh - ${HEADER_HEIGHT_PX}px)`}
           bg="blue.500"
           color="black"
@@ -54,7 +79,7 @@ export function AppDrawer({ isOpen, onClose }) {
           }}
         >
           <Box position="relative" zIndex={1} h="full" display="flex" flexDirection="column">
-            <CloseButton placeSelf="end" size="sm" w="28px" h="28px" onClick={onClose} />
+            <CloseButton placeSelf="end" size="sm" w="28px" h="28px" onClick={() => setIsOpen(false)} />
             {/* Заголовок */}
             <HStack
               justify="space-between"
@@ -80,9 +105,9 @@ export function AppDrawer({ isOpen, onClose }) {
 
             {/* Навигация */}
             <Stack gap={3} flex={1}>
-              {menuItems.map((item, index) => (
+              {chapters.map((item, index) => (
                 <Button
-                  key={item.label}
+                  key={item.id}
                   variant={location.pathname === item.path ? 'solid' : 'ghost'}
                   bg={location.pathname === item.path ? 'whiteAlpha.300' : 'transparent'}
                   onClick={() => handleNavigation(item.path)}
@@ -100,16 +125,11 @@ export function AppDrawer({ isOpen, onClose }) {
                   _active={{
                     bg: 'whiteAlpha.300',
                   }}
-                  leftIcon={
-                    <Text fontSize="lg" opacity={0.9}>
-                      {item.icon}
-                    </Text>
-                  }
                   fontWeight="medium"
                   opacity={0.9}
                   animation={isOpen ? `slideInLeft 0.3s ease-out ${index * 0.05}s both` : 'none'}
                 >
-                  {item.label}
+                  {item.title}
                 </Button>
               ))}
             </Stack>
@@ -132,20 +152,22 @@ export function AppDrawer({ isOpen, onClose }) {
         </Box>
       </Box>
 
-      {/* Затемненный фон с размытием */}
-      {isOpen && (
-        <Box
-          position="fixed"
-          insetInlineStart="0"
-          insetBlockStart={`${HEADER_HEIGHT_PX}px`}
-          w="100vw"
-          h={`calc(100vh - ${HEADER_HEIGHT_PX}px)`}
-          bg="blackAlpha.600"
-          backdropFilter="blur(4px)"
-          opacity={isOpen ? 1 : 0}
-          transition="opacity 0.3s ease"
-        />
-      )}
+      {/* Затемненный фон с размытием - клик закрывает drawer */}
+      <Box
+        position="fixed"
+        insetInlineStart="0"
+        insetBlockStart={`${HEADER_HEIGHT_PX}px`}
+        w="100vw"
+        h={`calc(100vh - ${HEADER_HEIGHT_PX}px)`}
+        bg="blackAlpha.600"
+        backdropFilter="blur(4px)"
+        opacity={isOpen ? 1 : 0}
+        visibility={isOpen ? 'visible' : 'hidden'}
+        transition="opacity 0.3s ease, visibility 0.3s ease"
+        zIndex="overlay"
+        onClick={() => setIsOpen(false)}
+        cursor="pointer"
+      />
 
       {/* CSS анимации */}
       <style jsx global>{`

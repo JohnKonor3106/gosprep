@@ -7,14 +7,16 @@ export const ControlMechanismsRender = ({
   procedures,
   subjects,
   consequences,
+  answer_outline,
+  sources,
 }) => {
   return (
     <Box
       w="100%"
       maxW="1300px"
-      maxH="80vh"
+      maxH="72vh"
       overflowY="auto"
-      p={6}
+      p={4}
       borderWidth="1px"
       borderRadius="lg"
       boxShadow="md"
@@ -75,6 +77,38 @@ export const ControlMechanismsRender = ({
               Последствия нарушений:
             </Text>
             <Text color="gray.700">{consequences}</Text>
+          </Box>
+        )}
+
+        {/* Опорный план ответа */}
+        {answer_outline && answer_outline.length > 0 && (
+          <Box width="100%">
+            <Heading as="h3" size="md" mb={3} color="gray.700">
+              Опорный план ответа
+            </Heading>
+            <VStack align="start" spacing={1}>
+              {answer_outline.map((item, i) => (
+                <Text key={i} color="gray.700">
+                  • {item}
+                </Text>
+              ))}
+            </VStack>
+          </Box>
+        )}
+
+        {/* Источники */}
+        {sources && sources.length > 0 && (
+          <Box width="100%">
+            <Heading as="h3" size="sm" mb={2} color="gray.700">
+              Нормативные источники и литература
+            </Heading>
+            <VStack align="start" spacing={1}>
+              {sources.map((src, i) => (
+                <Text key={i} fontSize="sm" color="gray.600">
+                  • {src}
+                </Text>
+              ))}
+            </VStack>
           </Box>
         )}
       </VStack>
