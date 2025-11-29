@@ -243,8 +243,9 @@ export const useAppStore = create((set, get) => ({
       if (fallback) {
         const fallbackAnswers = {}
         if (fallback.answers?.answers) {
-          fallback.answers.answers.forEach((answer, index) => {
-            fallbackAnswers[index] = answer
+          // Используем answer.id как ключ (соответствует question.id в статических данных)
+          fallback.answers.answers.forEach((answer) => {
+            fallbackAnswers[answer.id] = answer
           })
         }
         
