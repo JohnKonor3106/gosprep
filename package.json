@@ -12,7 +12,10 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "migrate": "node src/scripts/migrate.js",
+    "export": "node src/scripts/export.js",
+    "sync": "npm run export"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.28.1",

@@ -107,21 +107,43 @@ async function authenticate(pb) {
 }
 
 /**
- * Создание дисциплины
+ * Создание или обновление дисциплины
  */
 async function createDiscipline(pb, discipline, order) {
   try {
-    const record = await pb.collection(CONFIG.collections.disciplines).create({
-      slug: discipline.slug,
-      title: discipline.title,
-      description: discipline.description,
-      category: discipline.category,
-      order: order,
-    });
+    // Проверяем, существует ли уже дисциплина
+    let existing = null;
+    try {
+      existing = await pb.collection(CONFIG.collections.disciplines).getFirstListItem(
+        `slug = "${discipline.slug}"`
+      );
+    } catch (err) {
+      // Дисциплина не найдена - создаём новую
+    }
     
-    stats.disciplines.created++;
-    log.success(`Дисциплина: ${discipline.title}`);
-    return record.id;
+    if (existing) {
+      // Обновляем существующую
+      const record = await pb.collection(CONFIG.collections.disciplines).update(existing.id, {
+        title: discipline.title,
+        description: discipline.description,
+        category: discipline.category,
+        order: order,
+      });
+      log.success(`Дисциплина обновлена: ${discipline.title}`);
+      return record.id;
+    } else {
+      // Создаём новую
+      const record = await pb.collection(CONFIG.collections.disciplines).create({
+        slug: discipline.slug,
+        title: discipline.title,
+        description: discipline.description,
+        category: discipline.category,
+        order: order,
+      });
+      stats.disciplines.created++;
+      log.success(`Дисциплина создана: ${discipline.title}`);
+      return record.id;
+    }
   } catch (err) {
     stats.disciplines.failed++;
     log.error(`Дисциплина ${discipline.slug}: ${err.message}`);
@@ -130,10 +152,20 @@ async function createDiscipline(pb, discipline, order) {
 }
 
 /**
- * Создание вопроса
+ * Создание или обновление вопроса
  */
 async function createQuestion(pb, disciplineId, question) {
-  const record = await pb.collection(CONFIG.collections.questions).create({
+  // Проверяем, существует ли уже вопрос
+  let existing = null;
+  try {
+    existing = await pb.collection(CONFIG.collections.questions).getFirstListItem(
+      `discipline = "${disciplineId}" && number = ${question.id}`
+    );
+  } catch (err) {
+    // Вопрос не найден - создаём новый
+  }
+  
+  const questionData = {
     discipline: disciplineId,
     number: question.id,
     structure_type: question.structure_type || '',
@@ -150,26 +182,51 @@ async function createQuestion(pb, disciplineId, question) {
     learning_goals: question.learning_goals || [],
     prerequisites: question.prerequisites || [],
     ai_instructions: question.ai_instructions || '',
-  });
+  };
   
-  stats.questions.created++;
-  return record;
+  if (existing) {
+    // Обновляем существующий
+    const record = await pb.collection(CONFIG.collections.questions).update(existing.id, questionData);
+    return record;
+  } else {
+    // Создаём новый
+    const record = await pb.collection(CONFIG.collections.questions).create(questionData);
+    stats.questions.created++;
+    return record;
+  }
 }
 
 /**
- * Создание ответа
+ * Создание или обновление ответа
  */
 async function createAnswer(pb, questionId, answer, disciplineTitle) {
-  await pb.collection(CONFIG.collections.answers).create({
+  // Проверяем, существует ли уже ответ
+  let existing = null;
+  try {
+    existing = await pb.collection(CONFIG.collections.answers).getFirstListItem(
+      `question = "${questionId}"`
+    );
+  } catch (err) {
+    // Ответ не найден - создаём новый
+  }
+  
+  const answerData = {
     question: questionId,
     number: answer.id,
     structure_type: answer.structure_type || '',
     title: disciplineTitle,
     decription: answer.title || '',  // Внимание: опечатка в PocketBase (без 's')
     content: answer.content || {},
-  });
+  };
   
-  stats.answers.created++;
+  if (existing) {
+    // Обновляем существующий
+    await pb.collection(CONFIG.collections.answers).update(existing.id, answerData);
+  } else {
+    // Создаём новый
+    await pb.collection(CONFIG.collections.answers).create(answerData);
+    stats.answers.created++;
+  }
 }
 
 /**
