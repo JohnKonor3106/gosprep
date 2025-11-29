@@ -1,4 +1,4 @@
-export const AdministrationPoliceAnswer = {
+export const administrationPoliceAnswer = {
   answers: [
     {
       id: 1,

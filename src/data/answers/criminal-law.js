@@ -1,4 +1,4 @@
-export const CriminalLawAnswer = {
+export const criminalLawAnswer = {
   answers: [
     {
       id: 1,

@@ -1,4 +1,4 @@
-export const TheoryStateLawAnswer = {
+export const theoryStateLawAnswer = {
   answers: [
     {
       id: 1,

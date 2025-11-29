@@ -121,13 +121,11 @@ function getFileName(slug) {
 }
 
 /**
- * Генерация имени переменной из slug
+ * Генерация имени переменной из slug (camelCase)
  */
 function getVariableName(slug) {
-  return slug
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('');
+  const parts = slug.split('-');
+  return parts[0] + parts.slice(1).map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join('');
 }
 
 /**

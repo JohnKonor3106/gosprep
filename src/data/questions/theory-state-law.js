@@ -1,4 +1,4 @@
-export const TheoryStateLawQuestions = {
+export const theoryStateLawQuestions = {
   discipline: 'humanitarian',
   title: 'Теория государства и права: учебные схемы анализа',
   id: 'theory-state-law',

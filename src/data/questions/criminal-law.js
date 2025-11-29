@@ -1,4 +1,4 @@
-export const CriminalLawQuestions = {
+export const criminalLawQuestions = {
   discipline: 'humanitarian',
   title: 'Уголовное право: учебные схемы анализа',
   id: 'criminal-law',

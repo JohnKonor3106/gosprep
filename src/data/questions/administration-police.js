@@ -1,4 +1,4 @@
-export const AdministrationPoliceQuestions = {
+export const administrationPoliceQuestions = {
   discipline: 'humanitarian',
   title: 'Административная деятельность: учебные схемы анализа',
   id: 'administration-police',
