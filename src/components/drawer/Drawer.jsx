@@ -56,14 +56,15 @@ export function AppDrawer() {
         zIndex="modal"
       >
         <Box
-          w="450px"
+          w={{ base: '100%', sm: '320px', md: '400px', lg: '450px' }}
+          maxW="100vw"
           h={`calc(100vh - ${HEADER_HEIGHT_PX}px)`}
           bg="blue.500"
           color="black"
           shadow="2xl"
           borderRightWidth="1px"
           borderColor="whiteAlpha.300"
-          p={6}
+          p={{ base: 4, md: 6 }}
           position="relative"
           overflow="hidden"
           _before={{

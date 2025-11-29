@@ -1,34 +1,65 @@
 // components/QuestionDetail.jsx
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Box, Text, Heading, Flex, Stack, Separator, Badge, HStack } from '@chakra-ui/react'
+import { Box, Text, Heading, Flex, Stack, Separator, Badge, HStack, Spinner } from '@chakra-ui/react'
 import { AnswerRenderer } from '@/components/render/AnswerRenderer'
 import { useAppStore } from '@/state/stateApp'
 import { STRUCTURE_TYPE_TITLES, DIFFICULTY_LABELS, DIFFICULTY_COLORS } from '@/constants'
 
 const QuestionDetail = () => {
   const { disciplineId, id } = useParams()
-  const { disciplines } = useAppStore()
+  const { getQuestion, loadDisciplineData, disciplineData, isLoadingDisciplineData } = useAppStore()
   
-  // Получаем данные дисциплины из store
-  const discipline = disciplines[disciplineId]
-  const questions = discipline?.questions || []
-  const answers = discipline?.answers || {}
+  const [question, setQuestion] = useState(null)
+  const [answer, setAnswer] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  // id из useParams -- строка, но question.id может быть числом или строкой.
-  const question = questions.find((q) => String(q.id) === String(id))
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true)
+      setError(null)
+      
+      try {
+        // Используем кэшированные данные через store
+        const { question: q, answer: a } = await getQuestion(disciplineId, id)
+        
+        if (!q) {
+          throw new Error('Вопрос не найден')
+        }
+        
+        setQuestion(q)
+        setAnswer(a)
+      } catch (err) {
+        console.error('Ошибка загрузки вопроса:', err)
+        setError(err.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-  if (!question) {
+    if (disciplineId && id) {
+      loadData()
+    }
+  }, [disciplineId, id, getQuestion])
+
+  // Показываем загрузку если данные ещё не в кэше
+  const isCacheLoading = isLoadingDisciplineData[disciplineId] && !disciplineData[disciplineId]
+
+  if (isLoading || isCacheLoading) {
     return (
-      <Box p={4}>
-        <Text color="red.500">Вопрос не найден</Text>
+      <Box p={8} display="flex" justifyContent="center" alignItems="center" minH="50vh">
+        <Spinner size="xl" color="blue.500" />
       </Box>
     )
   }
 
-  // Поиск ответа в переданном объекте ответов
-  let answer = null;
-  if (answers && Array.isArray(answers.answers)) {
-    answer = answers.answers.find((a) => String(a.id) === String(question.id))
+  if (error || !question) {
+    return (
+      <Box p={4}>
+        <Text color="red.500">{error || 'Вопрос не найден'}</Text>
+      </Box>
+    )
   }
 
   const structureLabel = STRUCTURE_TYPE_TITLES[question.structure_type] || 'Учебный модуль'
@@ -73,7 +104,7 @@ const QuestionDetail = () => {
             <Text fontSize="sm" textTransform="uppercase" color="whiteAlpha.700">
               Вопрос
             </Text>
-            <Heading fontSize={{ base: '3xl', md: '4xl' }}>{question.id}</Heading>
+            <Heading fontSize={{ base: '3xl', md: '4xl' }}>{question.number || question.id}</Heading>
           </Box>
 
           <Stack spacing={2}>
@@ -192,9 +223,15 @@ const QuestionDetail = () => {
         border="1px solid"
         borderColor="gray.100"
         overflowY="auto"
-       
       >
-        {answer ? AnswerRenderer(answer) : <Text color="gray.500">Ответ не найден</Text>}
+        {answer ? (
+          AnswerRenderer({
+            ...answer,
+            title: answer.decription || answer.title, // decription — опечатка в PB
+          })
+        ) : (
+          <Text color="gray.500">Ответ не найден</Text>
+        )}
       </Box>
     </Flex>
   )

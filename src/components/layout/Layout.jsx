@@ -8,7 +8,13 @@ export const Layout = () => {
     <>
       <Header />
       <AppDrawer />
-      <Box as="main" py={8} px={{ base: 4, md: 8 }}>
+      <Box 
+        as="main" 
+        py={8} 
+        px={{ base: 4, md: 8 }}
+        bg="gray.50"
+        minH="calc(100vh - 56px)"
+      >
         <Outlet />
       </Box>
     </>

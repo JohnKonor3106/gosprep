@@ -46,3 +46,7 @@ pids
 
 # Optional eslint cache
 .eslintcache
+
+# Documentation (exclude from git)
+docs/
+*.md

@@ -169,7 +169,7 @@ export const FeedbackSection = () => {
             <ContactItem 
               icon="💻" 
               label="GitHub" 
-              value="github.com/gosprep" 
+              value="github.com/JohnKonor3106/study-space" 
               href={CONTACTS.GITHUB}
             />
             <ContactItem 

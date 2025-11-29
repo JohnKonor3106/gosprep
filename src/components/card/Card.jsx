@@ -4,21 +4,21 @@ import { useNavigate } from 'react-router-dom'
 const QuestionCard = ({ questions }) => {
   const navigate = useNavigate()
 
-  const handleShowQuestion = (id) => {
-    navigate(`questions/${id}`)
+  const handleShowQuestion = (number) => {
+    navigate(`questions/${number}`)
   }
 
   return (
     <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} gap={4} mt={4}>
       {questions.map((q) => (
         <Box
-          key={q.id}
+          key={q.id || q.number}
           p={4}
           borderRadius="lg"
           bg="blue.50"
           border="1px solid"
           borderColor="blue.200"
-          onClick={() => handleShowQuestion(q.id)}
+          onClick={() => handleShowQuestion(q.number || q.id)}
           _hover={{
             bg: 'blue.100',
             cursor: 'pointer',
@@ -45,7 +45,7 @@ const QuestionCard = ({ questions }) => {
                 py={1}
                 borderRadius="md"
               >
-                {String(q.id).padStart(2, '0')}
+                {String(q.number || q.id).padStart(2, '0')}
               </Text>
             </Box>
             <Text
