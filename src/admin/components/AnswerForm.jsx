@@ -170,8 +170,8 @@ const AnswerForm = ({ answer = null, isEdit = false }) => {
         )}
 
         {/* Основные поля */}
-        <Box bg="white" p={6} borderRadius="xl" boxShadow="sm">
-          <Heading size="md" mb={4}>1️⃣ Выберите вопрос</Heading>
+        <Box bg="white" p={{ base: 4, md: 6 }} borderRadius="xl" boxShadow="sm" w="full" minW={0}>
+          <Heading size={{ base: 'sm', md: 'md' }} mb={4}>1️⃣ Выберите вопрос</Heading>
           
           <Box>
             <Text mb={1} fontSize="sm" fontWeight="medium">
@@ -183,12 +183,27 @@ const AnswerForm = ({ answer = null, isEdit = false }) => {
               value={formData.question}
               onChange={handleChange}
               w="full"
-              p={3}
+              p={{ base: 2.5, md: 3 }}
               borderRadius="md"
               border="1px solid"
               borderColor="gray.200"
-              fontSize="md"
+              bg="white"
+              fontSize={{ base: 'sm', md: 'md' }}
               required
+              _focus={{
+                borderColor: 'blue.500',
+                boxShadow: '0 0 0 1px var(--chakra-colors-blue-500)',
+              }}
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                appearance: 'none',
+                backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 0.5rem center',
+                backgroundSize: '1.5em 1.5em',
+                paddingRight: '2.5rem',
+              }}
             >
               {Object.entries(questionsByDiscipline).map(([disciplineId, disciplineQuestions]) => (
                 <optgroup key={disciplineId} label={disciplines[disciplineId]?.title || 'Без дисциплины'}>
@@ -207,8 +222,8 @@ const AnswerForm = ({ answer = null, isEdit = false }) => {
         </Box>
 
         {/* Метаданные */}
-        <Box bg="white" p={6} borderRadius="xl" boxShadow="sm">
-          <Heading size="md" mb={4}>2️⃣ Информация об ответе</Heading>
+        <Box bg="white" p={{ base: 4, md: 6 }} borderRadius="xl" boxShadow="sm" w="full" minW={0}>
+          <Heading size={{ base: 'sm', md: 'md' }} mb={4}>2️⃣ Информация об ответе</Heading>
           
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <Box>
@@ -255,8 +270,8 @@ const AnswerForm = ({ answer = null, isEdit = false }) => {
         </Box>
 
         {/* Тип структуры */}
-        <Box bg="white" p={6} borderRadius="xl" boxShadow="sm">
-          <Heading size="md" mb={4}>3️⃣ Тип ответа</Heading>
+        <Box bg="white" p={{ base: 4, md: 6 }} borderRadius="xl" boxShadow="sm" w="full" minW={0}>
+          <Heading size={{ base: 'sm', md: 'md' }} mb={4}>3️⃣ Тип ответа</Heading>
           <Text fontSize="sm" color="gray.500" mb={4}>
             Выберите тип, который лучше всего подходит для вашего вопроса
           </Text>
@@ -283,8 +298,8 @@ const AnswerForm = ({ answer = null, isEdit = false }) => {
         </Box>
 
         {/* Содержимое ответа */}
-        <Box bg="white" p={6} borderRadius="xl" boxShadow="sm">
-          <Heading size="md" mb={2}>4️⃣ Содержимое ответа</Heading>
+        <Box bg="white" p={{ base: 4, md: 6 }} borderRadius="xl" boxShadow="sm" w="full" minW={0}>
+          <Heading size={{ base: 'sm', md: 'md' }} mb={2}>4️⃣ Содержимое ответа</Heading>
           <Text fontSize="sm" color="gray.500" mb={4}>
             Тип: <strong>{selectedType?.label}</strong> — {selectedType?.hint}
           </Text>
@@ -297,19 +312,28 @@ const AnswerForm = ({ answer = null, isEdit = false }) => {
         </Box>
 
         {/* Actions */}
-        <HStack spacing={4} justify="flex-end">
+        <HStack 
+          spacing={4} 
+          justify="flex-end" 
+          flexWrap="wrap"
+          gap={2}
+          w="full"
+        >
           <Button
             variant="outline"
             onClick={() => navigate(ADMIN_ROUTES.ANSWERS)}
+            size={{ base: 'sm', md: 'md' }}
+            w={{ base: 'full', sm: 'auto' }}
           >
             Отмена
           </Button>
           <Button
             type="submit"
             colorScheme="blue"
-            size="lg"
+            size={{ base: 'sm', md: 'lg' }}
             loading={isLoading}
             loadingText="Сохранение..."
+            w={{ base: 'full', sm: 'auto' }}
           >
             {isEdit ? '💾 Сохранить изменения' : '✅ Создать ответ'}
           </Button>

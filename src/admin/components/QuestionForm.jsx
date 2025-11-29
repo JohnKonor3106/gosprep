@@ -144,8 +144,8 @@ const QuestionForm = ({ question = null, isEdit = false }) => {
         )}
 
         {/* Основные поля */}
-        <Box bg="white" p={6} borderRadius="xl" boxShadow="sm">
-          <Heading size="md" mb={4}>Основная информация</Heading>
+        <Box bg="white" p={{ base: 4, md: 6 }} borderRadius="xl" boxShadow="sm" w="full" minW={0}>
+          <Heading size={{ base: 'sm', md: 'md' }} mb={4}>Основная информация</Heading>
           
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <Box>
@@ -158,11 +158,27 @@ const QuestionForm = ({ question = null, isEdit = false }) => {
                 value={formData.discipline}
                 onChange={handleChange}
                 w="full"
-                p={2}
+                p={{ base: 2.5, md: 2 }}
                 borderRadius="md"
                 border="1px solid"
                 borderColor="gray.200"
+                bg="white"
+                fontSize={{ base: 'sm', md: 'md' }}
                 required
+                _focus={{
+                  borderColor: 'blue.500',
+                  boxShadow: '0 0 0 1px var(--chakra-colors-blue-500)',
+                }}
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                }}
               >
                 {disciplines.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -227,24 +243,40 @@ const QuestionForm = ({ question = null, isEdit = false }) => {
         </Box>
 
         {/* Категории */}
-        <Box bg="white" p={6} borderRadius="xl" boxShadow="sm">
-          <Heading size="md" mb={4}>Категории</Heading>
+        <Box bg="white" p={{ base: 4, md: 6 }} borderRadius="xl" boxShadow="sm" w="full" minW={0}>
+          <Heading size={{ base: 'sm', md: 'md' }} mb={4}>Категории</Heading>
           
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
             <Box>
               <Text mb={1} fontSize="sm" fontWeight="medium">
                 Тип структуры
               </Text>
-              <Box
+                <Box
                 as="select"
                 name="structure_type"
                 value={formData.structure_type}
                 onChange={handleChange}
                 w="full"
-                p={2}
+                p={{ base: 2.5, md: 2 }}
                 borderRadius="md"
                 border="1px solid"
                 borderColor="gray.200"
+                bg="white"
+                fontSize={{ base: 'sm', md: 'md' }}
+                _focus={{
+                  borderColor: 'blue.500',
+                  boxShadow: '0 0 0 1px var(--chakra-colors-blue-500)',
+                }}
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                }}
               >
                 {STRUCTURE_TYPES.map((type) => (
                   <option key={type.value} value={type.value}>
@@ -258,16 +290,32 @@ const QuestionForm = ({ question = null, isEdit = false }) => {
               <Text mb={1} fontSize="sm" fontWeight="medium">
                 Сложность
               </Text>
-              <Box
+                <Box
                 as="select"
                 name="difficulty"
                 value={formData.difficulty}
                 onChange={handleChange}
                 w="full"
-                p={2}
+                p={{ base: 2.5, md: 2 }}
                 borderRadius="md"
                 border="1px solid"
                 borderColor="gray.200"
+                bg="white"
+                fontSize={{ base: 'sm', md: 'md' }}
+                _focus={{
+                  borderColor: 'blue.500',
+                  boxShadow: '0 0 0 1px var(--chakra-colors-blue-500)',
+                }}
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                }}
               >
                 {DIFFICULTY_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -281,16 +329,32 @@ const QuestionForm = ({ question = null, isEdit = false }) => {
               <Text mb={1} fontSize="sm" fontWeight="medium">
                 Важность
               </Text>
-              <Box
+                <Box
                 as="select"
                 name="importance"
                 value={formData.importance}
                 onChange={handleChange}
                 w="full"
-                p={2}
+                p={{ base: 2.5, md: 2 }}
                 borderRadius="md"
                 border="1px solid"
                 borderColor="gray.200"
+                bg="white"
+                fontSize={{ base: 'sm', md: 'md' }}
+                _focus={{
+                  borderColor: 'blue.500',
+                  boxShadow: '0 0 0 1px var(--chakra-colors-blue-500)',
+                }}
+                style={{
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                }}
               >
                 {IMPORTANCE_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -316,8 +380,8 @@ const QuestionForm = ({ question = null, isEdit = false }) => {
         </Box>
 
         {/* Дополнительные поля */}
-        <Box bg="white" p={6} borderRadius="xl" boxShadow="sm">
-          <Heading size="md" mb={4}>Детали</Heading>
+        <Box bg="white" p={{ base: 4, md: 6 }} borderRadius="xl" boxShadow="sm" w="full" minW={0}>
+          <Heading size={{ base: 'sm', md: 'md' }} mb={4}>Детали</Heading>
           
           <Box mb={4}>
             <Text mb={1} fontSize="sm" fontWeight="medium">
@@ -385,10 +449,18 @@ const QuestionForm = ({ question = null, isEdit = false }) => {
         </Box>
 
         {/* Actions */}
-        <HStack spacing={4} justify="flex-end">
+        <HStack 
+          spacing={4} 
+          justify="flex-end" 
+          flexWrap="wrap"
+          gap={2}
+          w="full"
+        >
           <Button
             variant="outline"
             onClick={() => navigate(ADMIN_ROUTES.QUESTIONS)}
+            size={{ base: 'sm', md: 'md' }}
+            w={{ base: 'full', sm: 'auto' }}
           >
             Отмена
           </Button>
@@ -397,6 +469,8 @@ const QuestionForm = ({ question = null, isEdit = false }) => {
             colorScheme="blue"
             loading={isLoading}
             loadingText="Сохранение..."
+            size={{ base: 'sm', md: 'md' }}
+            w={{ base: 'full', sm: 'auto' }}
           >
             {isEdit ? 'Сохранить' : 'Создать'}
           </Button>

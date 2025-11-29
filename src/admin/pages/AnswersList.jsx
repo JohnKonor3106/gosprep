@@ -82,29 +82,33 @@ const AnswersList = () => {
 
   return (
     <Box>
-      <HStack justify="space-between" mb={6}>
-        <Box>
-          <Heading size="lg">Ответы</Heading>
-          <Text color="gray.500">Управление ответами на вопросы</Text>
+      <VStack align={{ base: 'stretch', md: 'flex-start' }} spacing={4} mb={6}>
+        <Box w="full">
+          <Heading size={{ base: 'md', md: 'lg' }}>Ответы</Heading>
+          <Text color="gray.500" fontSize={{ base: 'sm', md: 'md' }}>Управление ответами на вопросы</Text>
         </Box>
         <Button
           colorScheme="blue"
           onClick={() => navigate(ADMIN_ROUTES.ANSWER_CREATE)}
+          size={{ base: 'sm', md: 'md' }}
+          w={{ base: 'full', md: 'auto' }}
         >
           + Добавить ответ
         </Button>
-      </HStack>
+      </VStack>
 
       {/* Search */}
-      <HStack spacing={4} mb={6}>
+      <Box mb={6}>
         <Input
           placeholder="Поиск..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          maxW="300px"
+          w="full"
+          maxW={{ base: '100%', md: '300px' }}
           bg="white"
+          size={{ base: 'sm', md: 'md' }}
         />
-      </HStack>
+      </Box>
 
       {/* Table */}
       {isLoading ? (
@@ -112,8 +116,15 @@ const AnswersList = () => {
           <Spinner size="xl" color="blue.500" />
         </Box>
       ) : (
-        <Box bg="white" borderRadius="xl" boxShadow="sm" overflow="hidden">
-          <Table.Root size="sm">
+        <Box 
+          bg="white" 
+          borderRadius="xl" 
+          boxShadow="sm" 
+          overflow="hidden"
+          w="full"
+          overflowX="auto"
+        >
+          <Table.Root size="sm" minW="800px">
             <Table.Header>
               <Table.Row bg="gray.50">
                 <Table.ColumnHeader w="60px">#</Table.ColumnHeader>
@@ -157,17 +168,19 @@ const AnswersList = () => {
                     <Table.Cell>
                       <HStack spacing={1}>
                         <Button
-                          size="xs"
+                          size={{ base: '2xs', sm: 'xs' }}
                           variant="ghost"
                           onClick={() => navigate(ADMIN_ROUTES.ANSWER_EDIT(answer.id))}
+                          fontSize={{ base: 'xs', md: 'sm' }}
                         >
                           ✏️
                         </Button>
                         <Button
-                          size="xs"
+                          size={{ base: '2xs', sm: 'xs' }}
                           variant="ghost"
                           colorScheme="red"
                           onClick={() => handleDelete(answer.id)}
+                          fontSize={{ base: 'xs', md: 'sm' }}
                         >
                           🗑️
                         </Button>

@@ -80,36 +80,42 @@ const QuestionPreview = () => {
   return (
     <Box>
       {/* Header */}
-      <HStack justify="space-between" mb={6}>
-        <Box>
-          <Heading size="lg">Превью вопроса</Heading>
-          <Text color="gray.500">
+      <VStack align={{ base: 'stretch', md: 'flex-start' }} spacing={4} mb={6}>
+        <Box w="full">
+          <Heading size={{ base: 'md', md: 'lg' }}>Превью вопроса</Heading>
+          <Text color="gray.500" fontSize={{ base: 'sm', md: 'md' }}>
             {discipline?.title} — Вопрос #{question.number}
           </Text>
         </Box>
-        <HStack spacing={2}>
+        <HStack spacing={2} w={{ base: 'full', md: 'auto' }} flexWrap="wrap" gap={2}>
           <Button
             variant="outline"
             onClick={() => navigate(ADMIN_ROUTES.QUESTIONS)}
+            size={{ base: 'xs', sm: 'sm', md: 'md' }}
+            w={{ base: 'full', sm: 'auto' }}
           >
             ← К списку
           </Button>
           <Button
             colorScheme="blue"
             onClick={() => navigate(ADMIN_ROUTES.QUESTION_EDIT(question.id))}
+            size={{ base: 'xs', sm: 'sm', md: 'md' }}
+            w={{ base: 'full', sm: 'auto' }}
           >
             Редактировать
           </Button>
         </HStack>
-      </HStack>
+      </VStack>
 
       {/* Preview как на основном сайте */}
-      <Flex
-        direction={{ base: 'column', lg: 'row' }}
-        align="stretch"
-        gap={{ base: 4, lg: 6 }}
-        minH="70vh"
-      >
+      <Box w="full" overflowX="auto" minW={0}>
+        <Flex
+          direction={{ base: 'column', lg: 'row' }}
+          align="stretch"
+          gap={{ base: 4, lg: 6 }}
+          minH="70vh"
+          minW={{ base: '100%', lg: '800px' }}
+        >
         {/* Левая колонка — вопрос */}
         <Box
           w={{ base: '100%', lg: '380px' }}
@@ -262,12 +268,13 @@ const QuestionPreview = () => {
         >
           {answer ? (
             <>
-              <HStack justify="space-between" mb={4}>
-                <Badge colorScheme="green">Ответ #{answer.number}</Badge>
+              <HStack justify="space-between" mb={4} flexWrap="wrap" gap={2}>
+                <Badge colorScheme="green" fontSize={{ base: 'xs', md: 'sm' }}>Ответ #{answer.number}</Badge>
                 <Button
-                  size="xs"
+                  size={{ base: 'xs', sm: 'xs', md: 'sm' }}
                   variant="outline"
                   onClick={() => navigate(ADMIN_ROUTES.ANSWER_EDIT(answer.id))}
+                  fontSize={{ base: 'xs', md: 'sm' }}
                 >
                   Редактировать ответ
                 </Button>
@@ -279,10 +286,11 @@ const QuestionPreview = () => {
             </>
           ) : (
             <Box textAlign="center" py={12}>
-              <Text color="gray.500" mb={4}>Ответ не найден</Text>
+              <Text color="gray.500" mb={4} fontSize={{ base: 'sm', md: 'md' }}>Ответ не найден</Text>
               <Button
                 colorScheme="blue"
                 onClick={() => navigate(ADMIN_ROUTES.ANSWER_CREATE)}
+                size={{ base: 'xs', sm: 'sm', md: 'md' }}
               >
                 Создать ответ
               </Button>
@@ -290,6 +298,7 @@ const QuestionPreview = () => {
           )}
         </Box>
       </Flex>
+      </Box>
     </Box>
   )
 }

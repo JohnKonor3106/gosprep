@@ -39,7 +39,6 @@ export const FeedbackSection = () => {
       // Здесь можно добавить реальную отправку:
       // await fetch('/api/feedback', { method: 'POST', body: JSON.stringify(formData) })
       
-      console.log('Feedback submitted:', formData)
       setSubmitStatus('success')
       setFormData({ name: '', email: '', type: 'suggestion', message: '' })
     } catch (error) {

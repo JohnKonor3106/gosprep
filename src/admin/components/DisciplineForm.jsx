@@ -111,10 +111,10 @@ const DisciplineForm = ({ discipline = null, isEdit = false }) => {
           </Alert.Root>
         )}
 
-        <Box bg="white" p={6} borderRadius="xl" boxShadow="sm">
-          <Heading size="md" mb={4}>Основная информация</Heading>
+        <Box bg="white" p={{ base: 4, md: 6 }} borderRadius="xl" boxShadow="sm" w="full" minW={0}>
+          <Heading size={{ base: 'sm', md: 'md' }} mb={4}>Основная информация</Heading>
           
-          <VStack spacing={4} align="stretch">
+          <VStack spacing={4} align="stretch" w="full">
             <Box>
               <Text mb={1} fontSize="sm" fontWeight="medium">
                 Название *
@@ -168,10 +168,26 @@ const DisciplineForm = ({ discipline = null, isEdit = false }) => {
                   value={formData.category}
                   onChange={handleChange}
                   w="full"
-                  p={2}
+                  p={{ base: 2.5, md: 2 }}
                   borderRadius="md"
                   border="1px solid"
                   borderColor="gray.200"
+                  bg="white"
+                  fontSize={{ base: 'sm', md: 'md' }}
+                  _focus={{
+                    borderColor: 'blue.500',
+                    boxShadow: '0 0 0 1px var(--chakra-colors-blue-500)',
+                  }}
+                  style={{
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    appearance: 'none',
+                    backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundSize: '1.5em 1.5em',
+                    paddingRight: '2.5rem',
+                  }}
                 >
                   {CATEGORY_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -197,10 +213,18 @@ const DisciplineForm = ({ discipline = null, isEdit = false }) => {
           </VStack>
         </Box>
 
-        <HStack spacing={4} justify="flex-end">
+        <HStack 
+          spacing={4} 
+          justify="flex-end" 
+          flexWrap="wrap"
+          gap={2}
+          w="full"
+        >
           <Button
             variant="outline"
             onClick={() => navigate(ADMIN_ROUTES.DISCIPLINES)}
+            size={{ base: 'sm', md: 'md' }}
+            w={{ base: 'full', sm: 'auto' }}
           >
             Отмена
           </Button>
@@ -209,6 +233,8 @@ const DisciplineForm = ({ discipline = null, isEdit = false }) => {
             colorScheme="blue"
             loading={isLoading}
             loadingText="Сохранение..."
+            size={{ base: 'sm', md: 'md' }}
+            w={{ base: 'full', sm: 'auto' }}
           >
             {isEdit ? 'Сохранить' : 'Создать'}
           </Button>

@@ -179,21 +179,48 @@ export const useAppStore = create((set, get) => ({
         const chunks = chunkArray(questionIds, 30)
         
         for (const chunk of chunks) {
-          const filter = chunk.map(id => `question = "${id}"`).join(' || ')
-          const chunkAnswers = await pb.collection('answers').getFullList({
-            filter,
-          })
-          answers = answers.concat(chunkAnswers)
+          try {
+            // PocketBase синтаксис для OR условий
+            const filter = chunk.map(id => `question = "${id}"`).join(' || ')
+            const chunkAnswers = await pb.collection('answers').getFullList({
+              filter,
+            })
+            answers = answers.concat(chunkAnswers)
+          } catch (error) {
+            console.error('Ошибка загрузки ответов для чанка:', error)
+            // Fallback: загружаем по одному, если чанк не работает
+            for (const id of chunk) {
+              try {
+                const singleAnswer = await pb.collection('answers').getFirstListItem(
+                  `question = "${id}"`,
+                  { $autoCancel: false }
+                )
+                if (singleAnswer) {
+                  answers.push(singleAnswer)
+                }
+              } catch (err) {
+                // Ответа может не быть для этого вопроса - это нормально
+                // Не логируем, чтобы не засорять консоль
+              }
+            }
+          }
         }
       }
       
       // 4. Создаём мапу ответов
       const answersMap = {}
       answers.forEach(answer => {
-        if (answer.question) {
+        if (answer && answer.question) {
           answersMap[answer.question] = answer
         }
       })
+      
+      // Проверяем, что все вопросы имеют ответы (для отладки)
+      const questionsWithoutAnswers = questions.filter(q => !answersMap[q.id])
+      if (questionsWithoutAnswers.length > 0) {
+        console.warn(`Вопросы без ответов (${questionsWithoutAnswers.length}):`, 
+          questionsWithoutAnswers.map(q => ({ id: q.id, number: q.number })))
+      }
       
       const data = {
         discipline,
@@ -268,17 +295,45 @@ export const useAppStore = create((set, get) => ({
       return { question: null, answer: null }
     }
     
-    // Ищем вопрос по номеру
+    // Ищем вопрос по номеру или ID
     const question = data.questions.find(q => 
-      String(q.number) === String(questionNumber) || String(q.id) === String(questionNumber)
+      String(q.number) === String(questionNumber) || 
+      String(q.id) === String(questionNumber) ||
+      String(q.id) === String(questionNumber)
     )
     
     if (!question) {
       return { question: null, answer: null }
     }
     
-    // Получаем ответ
-    const answer = data.answers[question.id] || null
+    // Получаем ответ из мапы
+    const answer = data.answers && data.answers[question.id] ? data.answers[question.id] : null
+    
+    // Если ответ не найден в кэше, но данные загружены, попробуем загрузить напрямую
+    if (!answer && data.questions && !data.isStatic) {
+      try {
+        const directAnswer = await pb.collection('answers').getFirstListItem(
+          `question = "${question.id}"`,
+          { $autoCancel: false }
+        )
+        if (directAnswer) {
+          // Обновляем кэш
+          const updatedAnswers = { ...data.answers, [question.id]: directAnswer }
+          set({
+            disciplineData: {
+              ...get().disciplineData,
+              [disciplineSlug]: {
+                ...data,
+                answers: updatedAnswers
+              }
+            }
+          })
+          return { question, answer: directAnswer }
+        }
+      } catch (err) {
+        // Ответа нет - это нормально
+      }
+    }
     
     return { question, answer }
   },
@@ -320,7 +375,6 @@ export const useAppStore = create((set, get) => ({
     try {
       // Подписка на изменения дисциплин
       await pb.collection('disciplines').subscribe('*', (e) => {
-        console.log('📡 Realtime [disciplines]:', e.action, e.record?.title)
         
         if (e.action === 'create' || e.action === 'update' || e.action === 'delete') {
           // Перезагружаем список дисциплин
@@ -330,7 +384,6 @@ export const useAppStore = create((set, get) => ({
       
       // Подписка на изменения вопросов
       await pb.collection('questions').subscribe('*', (e) => {
-        console.log('📡 Realtime [questions]:', e.action, e.record?.title)
         
         if (e.action === 'create' || e.action === 'update' || e.action === 'delete') {
           // Инвалидируем кэш дисциплины, к которой относится вопрос
@@ -350,7 +403,6 @@ export const useAppStore = create((set, get) => ({
       
       // Подписка на изменения ответов
       await pb.collection('answers').subscribe('*', (e) => {
-        console.log('📡 Realtime [answers]:', e.action)
         
         if (e.action === 'create' || e.action === 'update' || e.action === 'delete') {
           // Находим дисциплину через вопрос
@@ -369,7 +421,6 @@ export const useAppStore = create((set, get) => ({
       })
       
       set({ isSubscribed: true })
-      console.log('✅ Realtime подписки активированы')
     } catch (error) {
       console.error('❌ Ошибка подписки на realtime:', error)
     }
@@ -384,7 +435,6 @@ export const useAppStore = create((set, get) => ({
       await pb.collection('questions').unsubscribe('*')
       await pb.collection('answers').unsubscribe('*')
       set({ isSubscribed: false })
-      console.log('🔌 Realtime подписки отключены')
     } catch (error) {
       console.error('Ошибка отписки:', error)
     }

@@ -15,33 +15,36 @@ import { useAuthStore } from '@/admin/state/authStore'
 const StatCard = ({ icon, label, value, color = 'blue', isLoading }) => (
   <Box
     bg="white"
-    p={6}
+    p={{ base: 4, md: 6 }}
     borderRadius="xl"
     boxShadow="sm"
     border="1px solid"
     borderColor="gray.100"
+    w="full"
+    minW={0}
   >
-    <HStack spacing={4}>
+    <HStack spacing={{ base: 3, md: 4 }} align="center">
       <Box
-        w={12}
-        h={12}
+        w={{ base: 10, md: 12 }}
+        h={{ base: 10, md: 12 }}
         bg={`${color}.100`}
         borderRadius="lg"
         display="flex"
         alignItems="center"
         justifyContent="center"
-        fontSize="2xl"
+        fontSize={{ base: 'xl', md: '2xl' }}
+        flexShrink={0}
       >
         {icon}
       </Box>
-      <VStack align="start" spacing={0}>
-        <Text fontSize="sm" color="gray.500">
+      <VStack align="start" spacing={0} minW={0} flex="1">
+        <Text fontSize={{ base: 'xs', md: 'sm' }} color="gray.500" noOfLines={1}>
           {label}
         </Text>
         {isLoading ? (
           <Spinner size="sm" />
         ) : (
-          <Text fontSize="2xl" fontWeight="bold" color={`${color}.600`}>
+          <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" color={`${color}.600`}>
             {value}
           </Text>
         )}
@@ -64,16 +67,8 @@ const AdminDashboard = () => {
     const loadStats = async () => {
       setIsLoading(true)
       
-      // Диагностика авторизации
-      console.log('=== ДИАГНОСТИКА АВТОРИЗАЦИИ ===')
-      console.log('Token:', pb.authStore.token ? 'ЕСТЬ' : 'НЕТ')
-      console.log('Valid:', pb.authStore.isValid)
-      console.log('User:', pb.authStore.model)
-      console.log('===============================')
-      
       // Проверяем авторизацию
       if (!pb.authStore.isValid) {
-        console.error('❌ Пользователь не авторизован!')
         setIsLoading(false)
         return
       }
@@ -111,11 +106,11 @@ const AdminDashboard = () => {
   return (
     <Box>
       {/* Header */}
-      <Box mb={8}>
-        <Heading size="lg" color="gray.800">
+      <Box mb={{ base: 6, md: 8 }}>
+        <Heading size={{ base: 'md', md: 'lg' }} color="gray.800">
           Добро пожаловать, {user?.name || user?.email?.split('@')[0] || 'Редактор'}!
         </Heading>
-        <Text color="gray.500" mt={1}>
+        <Text color="gray.500" mt={1} fontSize={{ base: 'sm', md: 'md' }}>
           Панель управления контентом GosPrep
         </Text>
       </Box>
@@ -146,8 +141,8 @@ const AdminDashboard = () => {
       </SimpleGrid>
 
       {/* Recent questions */}
-      <Box bg="white" borderRadius="xl" boxShadow="sm" p={6}>
-        <Heading size="md" mb={4}>
+      <Box bg="white" borderRadius="xl" boxShadow="sm" p={{ base: 4, md: 6 }} w="full" minW={0}>
+        <Heading size={{ base: 'sm', md: 'md' }} mb={4}>
           Последние вопросы
         </Heading>
         
@@ -156,7 +151,7 @@ const AdminDashboard = () => {
             <Spinner size="lg" color="blue.500" />
           </Box>
         ) : recentQuestions.length === 0 ? (
-          <Text color="gray.500" py={4}>
+          <Text color="gray.500" py={4} fontSize={{ base: 'sm', md: 'md' }}>
             Пока нет вопросов
           </Text>
         ) : (
@@ -164,24 +159,26 @@ const AdminDashboard = () => {
             {recentQuestions.map((question) => (
               <Box
                 key={question.id}
-                p={4}
+                p={{ base: 3, md: 4 }}
                 bg="gray.50"
                 borderRadius="lg"
                 border="1px solid"
                 borderColor="gray.100"
+                w="full"
+                minW={0}
               >
-                <HStack justify="space-between" mb={2}>
-                  <Badge colorScheme="blue">
+                <HStack justify="space-between" mb={2} flexWrap="wrap" gap={2}>
+                  <Badge colorScheme="blue" fontSize={{ base: 'xs', md: 'sm' }}>
                     #{question.number}
                   </Badge>
-                  <Text fontSize="xs" color="gray.500">
+                  <Text fontSize="xs" color="gray.500" whiteSpace="nowrap">
                     {new Date(question.created).toLocaleDateString('ru-RU')}
                   </Text>
                 </HStack>
-                <Text fontWeight="medium" noOfLines={2}>
+                <Text fontWeight="medium" fontSize={{ base: 'sm', md: 'md' }} noOfLines={2} wordBreak="break-word">
                   {question.title}
                 </Text>
-                <Text fontSize="sm" color="gray.500" mt={1}>
+                <Text fontSize={{ base: 'xs', md: 'sm' }} color="gray.500" mt={1} noOfLines={1}>
                   {question.expand?.discipline?.title || 'Без дисциплины'}
                 </Text>
               </Box>

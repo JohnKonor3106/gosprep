@@ -216,13 +216,14 @@ const QuestionDetail = () => {
       <Box
         flex="1"
         bg="white"
-        h={{ base: '100%', lg: '800px' }}
+        minH={{ base: 'auto', lg: '800px' }}
+        h={{ base: 'auto', lg: '800px' }}
         p={{ base: 5, md: 8 }}
         borderRadius="2xl"
         boxShadow="2xl"
         border="1px solid"
         borderColor="gray.100"
-        overflowY="auto"
+        overflowY={{ base: 'visible', lg: 'auto' }}
       >
         {answer ? (
           AnswerRenderer({
