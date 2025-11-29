@@ -10,6 +10,7 @@ const Home = lazy(() => import('@/pages/Home'))
 const Chapter = lazy(() => import('@/components/chapter/Chapter'))
 const DisciplinePage = lazy(() => import('@/pages/DisciplinePage'))
 const QuestionDetail = lazy(() => import('@/pages/QuestionDetail'))
+const FederalLawPage = lazy(() => import('@/pages/FederalLawPage'))
 const HelpPage = lazy(() => import('@/pages/HelpPage'))
 
 // Lazy loading — админка
@@ -66,8 +67,8 @@ export const AppRouter = () => {
             </Route>
         </Route>
 
-        <Route path={federalLawPath} element={<div>Федеральные законы</div>} />
-          <Route path={helpPath} element={<HelpPage />} />
+        <Route path={federalLawPath} element={<FederalLawPage />} />
+        <Route path={helpPath} element={<HelpPage />} />
         </Route>
 
         {/* ==================== АДМИН-ПАНЕЛЬ ==================== */}

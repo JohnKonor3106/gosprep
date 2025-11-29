@@ -10,7 +10,7 @@ export const APP_DESCRIPTION = 'Приложение для самоподгот
 export const CONTACTS = {
   EMAIL: 'alexeway124@gmail.com',
   GITHUB: 'https://github.com/JohnKonor3106/study-space',
-  TELEGRAM: 'https://t.me/gosprep_bot',
+  TELEGRAM: '...',
 }
 
 // Год для копирайта

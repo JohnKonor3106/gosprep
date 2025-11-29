@@ -11,9 +11,9 @@ export const chaptersConfig = [
         path: '/disciplines'
     },
     {
-        id: 'federal-low',
+        id: 'federal-law',
         title: 'Правовая база', 
-        path: '/federal-low'
+        path: '/federal-law'
     },
     {
         id: 'help',

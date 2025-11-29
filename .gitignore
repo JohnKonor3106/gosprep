@@ -49,4 +49,4 @@ pids
 
 # Documentation (exclude from git)
 docs/
-*.md
+env.example

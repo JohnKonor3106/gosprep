@@ -187,22 +187,61 @@ export const FeedbackSection = () => {
 
 // Контакт
 const ContactItem = ({ icon, label, value, href }) => (
-  <HStack justify="space-between">
-    <HStack gap={2}>
-      <Text>{icon}</Text>
-      <Text fontSize="sm" color="gray.600">{label}</Text>
-    </HStack>
-    <Button 
-      as="a" 
-      href={href} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      size="sm" 
-      variant="ghost" 
-      colorPalette="blue"
+  <Box>
+    {/* Мобильный layout (вертикальный) */}
+    <VStack 
+      gap={2} 
+      align="flex-start"
+      display={{ base: 'flex', md: 'none' }}
     >
-      {value}
-    </Button>
-  </HStack>
+      <HStack gap={2}>
+        <Text>{icon}</Text>
+        <Text fontSize="sm" color="gray.600" fontWeight="medium">{label}</Text>
+      </HStack>
+      <Button 
+        as="a" 
+        href={href} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        size="sm" 
+        variant="ghost" 
+        colorPalette="blue"
+        whiteSpace="normal"
+        wordBreak="break-all"
+        textAlign="left"
+        w="full"
+        justifyContent="flex-start"
+      >
+        {value}
+      </Button>
+    </VStack>
+
+    {/* Десктопный layout (горизонтальный) */}
+    <HStack 
+      justify="space-between"
+      display={{ base: 'none', md: 'flex' }}
+    >
+      <HStack gap={2}>
+        <Text>{icon}</Text>
+        <Text fontSize="sm" color="gray.600">{label}</Text>
+      </HStack>
+      <Button 
+        as="a" 
+        href={href} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        size="sm" 
+        variant="ghost" 
+        colorPalette="blue"
+        whiteSpace="nowrap"
+        minW={0}
+        maxW="100%"
+        overflow="hidden"
+        textOverflow="ellipsis"
+      >
+        {value}
+      </Button>
+    </HStack>
+  </Box>
 )
 
