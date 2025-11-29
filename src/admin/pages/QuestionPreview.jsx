@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Box, Text, Heading, Flex, Stack, Separator, Badge, HStack, Spinner, Button } from '@chakra-ui/react'
+import { Box, Text, Heading, Flex, Stack, Separator, Badge, HStack, VStack, Spinner, Button } from '@chakra-ui/react'
 import { AnswerRenderer } from '@/components/render/AnswerRenderer'
 import { pb } from '@/services/pocketbase'
 import { ADMIN_ROUTES } from '@/admin/constants/routes'
